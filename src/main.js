@@ -3,7 +3,6 @@ const app = express();
 const admin = require("firebase-admin");
 const moment = require('moment');
 const serviceAccount = require("./serviceAccountKey.json");
-const currentTime = moment();
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -22,11 +21,12 @@ app.post("/", (req, res) => {
         res.sendFile(`${__dirname}/index.html`);
         return
     }
-
+    
     const comment = req.body.comment
     console.log(comment);
     res.sendFile(`${__dirname}/index.html`);
-
+    
+    const currentTime = moment().utc;
     const time = currentTime.format("YYYYMMDDHHmmss");
     db.ref(`nikocomments/${time}`).set({ comment: comment });
 });
